@@ -29,6 +29,7 @@ class MessageController extends Controller
         {
             return ($exception->getMessage());
     }
+        return view('/messageCreatedSuccessfully');
     }
 
     public  function  showMessages()
