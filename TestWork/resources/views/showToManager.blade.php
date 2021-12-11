@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Мой блог</title>
     <style>
+        p{
+            width: 500px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow:ellipsis;
+        }
         .layout {
             width: 100%;
             max-width: 1024px;

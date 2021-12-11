@@ -58,7 +58,11 @@
             @endforeach
             @if(!empty($chats))
                 @foreach ($chats as $chat)
+                    @if($chat->author_id == Auth::id())
                     <p>{{$chat->text}}</p>
+                        @else
+                            <p>{{$chat->text}}</p>
+                        @endif
                 @endforeach
             @endif
                 @if((($message->author_id==Auth::id())||(Auth::user()->role == 'manager'))&&($message->status !== 'closed'))
@@ -70,6 +74,9 @@
                     @endif
                 @if((Auth::user()->role == 'manager')&&($message->status =='open'))
                     <a href="/admin/setViewed/{{$message->id}}">Принять заявку на рассмотрение!</a>
+                @endif
+                @if((($message->author_id==Auth::id())||($message->manager_id==Auth::id()))&&($message->status!='closed'))
+                    <a href="/delete/{{$message->id}}">Закрыть заявку!</a>
                 @endif
         </td>
 
