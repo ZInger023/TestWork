@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Заявочник</title>
+    <title>Главная страница</title>
 <style>
     .layout {
     width: 100%;
@@ -72,7 +72,7 @@
         </td>
     </tr>
     <tr>
-        <td class="footer" colspan="2">Все права защищены (c) Мой блог</td>
+        <td class="footer" colspan="2">Все права защищены (c)</td>
     </tr>
 </table>
 

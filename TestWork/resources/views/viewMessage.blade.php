@@ -2,7 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мой блог</title>
+    <title> @foreach ($messages as $message)
+            {{$message->name}}
+        @endforeach</title>
     <style>
         .layout {
             width: 100%;
@@ -44,7 +46,7 @@
 <table class="layout">
     <tr>
         <td colspan="2" class="header">
-            Заявочки
+            Заявки
         </td>
     </tr>
     <tr>
@@ -65,7 +67,7 @@
                         @endif
                 @endforeach
             @endif
-                @if((($message->author_id==Auth::id())||(Auth::user()->role == 'manager'))&&($message->status !== 'closed'))
+                @if((($message->author_id==Auth::id())||(Auth::user()->role == 'manager'))&&($message->status !== 'closed')&&($message->status !== 'open'))
             <form method="post" action="/{{$message->id}}/sendToChat">
                 @csrf
                 <input type="text" name="text" id="text" class="form-control" placeholder="Чат с менеджером" required="" autofocus="">
@@ -88,7 +90,7 @@
         </td>
     </tr>
     <tr>
-        <td class="footer" colspan="2">Все права защищены (c) Мой блог</td>
+        <td class="footer" colspan="2">Все права защищены (c)</td>
     </tr>
 </table>
 </body>

@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мой блог</title>
+    <title>Управление заявками</title>
     <style>
         .layout {
             width: 100%;
@@ -44,7 +44,7 @@
 <table class="layout">
     <tr>
         <td colspan="2" class="header">
-            Заявочки
+            Заявки
         </td>
     </tr>
     <tr>
@@ -103,7 +103,7 @@
         </td>
     </tr>
     <tr>
-        <td class="footer" colspan="2">Все права защищены (c) Мой блог</td>
+        <td class="footer" colspan="2">Все права защищены (c)</td>
     </tr>
 </table>
 </body>

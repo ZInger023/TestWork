@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мой блог</title>
+    <title>Список заявок</title>
     <style>
         p{
             width: 500px;
@@ -76,7 +76,7 @@
         </td>
     </tr>
     <tr>
-        <td class="footer" colspan="2">Все права защищены (c) Мой блог</td>
+        <td class="footer" colspan="2">Все права защищены (c)</td>
     </tr>
 </table>
 </body>
