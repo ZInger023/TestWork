@@ -1,83 +1,46 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Список заявок</title>
-    <style>
-        p{
-            width: 500px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow:ellipsis;
-        }
-        .layout {
-            width: 100%;
-            max-width: 1024px;
-            margin: auto;
-            background-color: white;
-            border-collapse: collapse;
-        }
-
-        .layout tr td {
-            padding: 20px;
-            vertical-align: top;
-            border: solid 1px gray;
-        }
-
-        .header {
-            font-size: 30px;
-        }
-
-        .footer {
-            text-align: center;
-        }
-
-        .sidebarHeader {
-            font-size: 20px;
-        }
-
-        .sidebar ul {
-            padding-left: 20px;
-        }
-
-        a, a:visited {
-            color: darkgreen;
-        }
-    </style>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </head>
-<body>
-<table class="layout">
-    <tr>
-        <td colspan="2" class="header">
-            Заявочки
-        </td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-        <td>
+<body class="d-flex h-100 text-center text-white bg-dark">
 
-            @foreach ($messages as $message)
-            <h2><a href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-            <p>{{$message->text}}</p>
-            @if(($message->author_id==Auth::id())&&($message->status!='closed'))
-                <a href="/delete/{{$message->id}}">Закрыть заявку!</a>
-                @endif
-            <hr>
-            @endforeach
-        </td>
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div>
+      <h3 class="float-md-start mb-0">Cover</h3>
+      <nav class="nav nav-masthead justify-content-center float-md-end">
+      <a class="nav-link" href="/dashboard">На главную</a>
+         @if (Auth::user()->role == 'user')
+        <a class="nav-link" href="/makeMessage">Оставить новую заявку</a>
+        <a class="nav-link" href="/myMessages">Мои заявки</a>
+         @endif
+         @if (Auth::user()->role == 'manager')
+         <a class="nav-link" href="/admin/show/all">Посмотреть все заявки</a>
+         <a class="nav-link" href="/admin">Отсортировать заявки</a>
+         @endif
+         <a class="nav-link" href="/logout">Выйти из аккаунта</a>
+      </nav>
+    </div>
+  </header>
 
-        <td width="300px" class="sidebar">
-            <div class="sidebarHeader">Меню</div>
-            <ul>
-                <li><a href="/dashboard">Главная страница</a></li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td class="footer" colspan="2">Все права защищены (c)</td>
-    </tr>
-</table>
+  <main class="px-3">
+  @foreach ($messages as $message)
+             <h2><a href="/message/{{$message->id}}">{{$message->name}}</a></h2>
+             <p>{{$message->text}}</p>
+             @if(($message->author_id==Auth::id())&&($message->status!='closed'))
+                 <a href="/delete/{{$message->id}}">Закрыть заявку!</a>
+                 @endif
+             <hr>
+             @endforeach
+  </main>
+
+  <footer class="mt-auto text-white-50">
+    <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+  </footer>
+</div>
 </body>
 </html>
