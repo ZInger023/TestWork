@@ -34,7 +34,7 @@
     </div>
     @endif
 
-    <form method="post" action="/registration">
+    <form method="post" action="/validateRegistration">
             @csrf
             <input type="text" name="nickname" id="nickname" class="form-control" placeholder="Enter nickname" required="" autofocus="">
             <input type="email" name="email" id="email" class="form-control" placeholder="Enter email" required="" autofocus="">

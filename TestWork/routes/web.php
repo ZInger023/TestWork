@@ -21,14 +21,14 @@ use App\Http\Controllers\Controller;
 |
 */
 
-Route::get('/reg', function () {
+Route::get('/registration', function () {
     return view('registrationPage');
 });
-Route::post( '/registration' ,  [RegistrationController::class,'registration'] );
-Route::get('/', function () {
+Route::post( '/validateRegistration' ,  [RegistrationController::class,'registration'] );
+Route::get('/login', function () {
     return view('loginPage');
 });
-Route::post( '/login' ,  [LoginController::class,'login'] );
+Route::post( '/log' ,  [LoginController::class,'login'] );
 Route::get('/dashboard', [Controller::class,'showDashboard']);
 Route::get('/makeMessage', [MessageController::class,'showCreateForm']);
 Route::get('/myMessages', [MessageController::class,'showMessages']);
