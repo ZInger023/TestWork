@@ -15,7 +15,7 @@
 
 
 Наполнение тестовыми данными
-Для создания user и manager в количестве 2 и 1, использовать команду "php artisan db:seed --class=UserSeeder"
+Для создания user и manager в количестве 2 и 1, использовать команду "php artisan db:seed --class=UsersTableSeeder"
 
 Данные: user {name: user$i, email: user$i@gmail.com, password:31567199}
 
