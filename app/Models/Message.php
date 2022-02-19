@@ -44,7 +44,7 @@ class Message extends Model
 
     public static function insertMessage (array $fields)
     {
-        $lastMessages = Message::where('author_id', Auth::user()->id)->where('created_at', '>', Carbon::now()->subDay())->first();
+        $lastMessages = Message::where('author_id', Auth::user()->id)->where('status','open')->where('created_at', '>', Carbon::now()->subDay())->first();
         if (empty($lastMessages)) {
            $message =  Message::create([
                 'name' => $fields['name'],

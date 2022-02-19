@@ -20,5 +20,8 @@ class LoginController extends Controller
 
             return redirect('dashboard');
         }
+        else {
+            return redirect('/login');
+        }
     }
 }

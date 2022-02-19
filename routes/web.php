@@ -21,6 +21,7 @@ use App\Http\Controllers\Controller;
 |
 */
 
+Route::redirect('/', '/login');
 Route::get('/registration', function () {
     return view('registrationPage');
 });

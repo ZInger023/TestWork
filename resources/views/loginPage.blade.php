@@ -40,6 +40,7 @@
            <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required="">
            <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Login</button>
        </form>
+      <a href="/registration">Sign Up!</a>
   </main>
 
   <footer class="mt-auto text-white-50">
