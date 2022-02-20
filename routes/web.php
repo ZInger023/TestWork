@@ -21,7 +21,9 @@ use App\Http\Controllers\Controller;
 |
 */
 
-Route::redirect('/', '/login');
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::get('/registration', function () {
     return view('registrationPage');
 });
@@ -39,9 +41,6 @@ Route::post( '/TryMessage' ,  [MessageController::class,'insertToBd'] );
 Route::get('/message/{id}', [ChatController::class,'showChat'])->name('message');
 Route::post( '/{id}/sendToChat' ,  [ChatController::class,'addToChat'] );
 
-//Route::get('/admin', function () {
-  //  return view('managerPage');
-//});
 Route::get( '/admin' ,  [AdminController::class,'showManagerPage'] );
 
 
