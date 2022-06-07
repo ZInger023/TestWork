@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Registration;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,7 @@ class RegistrationController extends Controller
             'password' => Hash::make($request['password'])
         ]);
         $remember = true;
+        Registration::SendMessage($request['email']);
         if (Auth::attempt($credentials,$remember)) {
             $request->session()->regenerate();
 

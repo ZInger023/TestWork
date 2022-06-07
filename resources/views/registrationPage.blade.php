@@ -39,7 +39,7 @@
             <input type="text" name="nickname" id="nickname" class="form-control" placeholder="Enter nickname" required="" autofocus="">
             <input type="email" name="email" id="email" class="form-control" placeholder="Enter email" required="" autofocus="">
             <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required="">
-            <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Sign up</button>
+            <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Зарегистрироваться</button>
         </form>
   </main>
 

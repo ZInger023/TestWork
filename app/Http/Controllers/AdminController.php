@@ -21,44 +21,56 @@ class AdminController extends Controller
         }
         catch (NotManagerException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
-        switch ($request['status']) {
+        $CurrentAndPreviousStatus = explode("|", $request['status']);
+        switch ($CurrentAndPreviousStatus[0]) {
             case 'open':
-                $up = DB::table('messages')
-                    ->where('status', 'open')
-                    ->get();
-
-                break;
-            case 'closed':
+                if((isset($CurrentAndPreviousStatus[1])) && ($CurrentAndPreviousStatus[0]==$CurrentAndPreviousStatus[1])) {
                 $up = DB::table('messages')
                     ->where('status', 'closed')
                     ->get();
+                    $CurrentAndPreviousStatus[0] = $selectString = 'Закрытые';
+                }
+                else {
+        $up = DB::table('messages')
+            ->where('status', 'open')
+            ->get();
+        $selectString = 'Открытые';
+                }
                 break;
             case 'viewed':
-                $up = DB::table('messages')
-                    ->where('status', 'viewed')
-                    ->get();
-                break;
-            case 'unviewed':
-                $up = DB::table('messages')
-                    ->where('status', 'open')
-                    ->get();
+                if((isset($CurrentAndPreviousStatus[1])) && ($CurrentAndPreviousStatus[0]==$CurrentAndPreviousStatus[1])) {
+                    $up = DB::table('messages')
+                        ->where('status', 'open')
+                        ->get();
+                    $CurrentAndPreviousStatus[0] = $selectString = 'Непросмотренные';
+                }
+                else {
+                    $up = DB::table('messages')
+                        ->where('status', 'viewed')
+                        ->get();
+                    $selectString = 'Просмотренные';
+                }
                 break;
             case 'answered':
-                $up = DB::table('messages')
-                    ->where('status', 'answered')
-                    ->get();
-                break;
-            case 'unanswered':
-                $up = DB::table('messages')
-                    ->where('status','!=' ,'answered')
-                    ->get();
+                if((isset($CurrentAndPreviousStatus[1])) && ($CurrentAndPreviousStatus[0]==$CurrentAndPreviousStatus[1])) {
+                    $up = DB::table('messages')
+                        ->where('status','!=' ,'answered')
+                        ->get();
+                    $CurrentAndPreviousStatus[0] = $selectString = 'Нет ответа';
+                }
+                else {
+                    $up = DB::table('messages')
+                        ->where('status', 'answered')
+                        ->get();
+                    $selectString = 'Есть ответ';
+                }
                 break;
             default:
             return redirect()->intended('dashboard');
         }
-        return view('/showToManager',['ups' => $up]);
+        return view('/showToManager',['ups' => $up,'selectString' => $selectString,'prevStatus' => $CurrentAndPreviousStatus[0]]);
     }
     public function showAll()
     {
@@ -67,7 +79,7 @@ class AdminController extends Controller
         }
         catch (NotManagerException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         $messages = Message::all();
         return view('/allmessages',['messages' => $messages]);
@@ -79,22 +91,12 @@ class AdminController extends Controller
         }
         catch (NotManagerException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         $id = $request->route('id');
         Message::setMessageViewed($id);
-        return redirect()->intended('dashboard');
-    }
-    public function showManagerPage ()
-    {
-        try {
-            User::isManager();
-        }
-        catch (NotManagerException $exception)
-        {
-            return ($exception->getMessage());
-        }
-        return view('managerPage');
+        //return redirect()->intended('dashboard');
+        return redirect()->route('message', ['id' => $id]);
     }
 }
 

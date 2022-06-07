@@ -33,14 +33,16 @@
             </ul>
         </div>
     @endif
-
+      @if(!empty($error))
+      <p style="color: red">@php echo $error @endphp</p>
+      @endif
    <form method="post" action="/log">
            @csrf
            <input type="email" name="email" id="email" class="form-control" placeholder="Enter email" required="" autofocus="">
            <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required="">
-           <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Login</button>
+           <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Войти</button>
        </form>
-      <a href="/registration">Sign Up!</a>
+      <a href="/registration">Зарегистрироваться</a>
   </main>
 
   <footer class="mt-auto text-white-50">

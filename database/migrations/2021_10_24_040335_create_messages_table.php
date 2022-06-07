@@ -18,8 +18,8 @@ class CreateMessagesTable extends Migration
             $table->foreignId('author_id');
             $table->foreignId('manager_id')->nullable();
             $table->timestamps();
-            $table->string('name');
-            $table->string('text',500);
+            $table->text('name');
+            $table->text('text',500);
             $table->enum('status',['open','closed','viewed','answered']);
         });
     }

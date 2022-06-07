@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Message;
 use App\Models\Chat;
 use App\Models\User;
+use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
+use App\Exceptions\NotUserException;
 
 class ChatController extends Controller
 {
@@ -22,7 +24,7 @@ class ChatController extends Controller
         }
         catch (NotUserException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         $text =$request->validate([
             'text' => 'required',
@@ -39,11 +41,17 @@ class ChatController extends Controller
         }
         catch (NotUserException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         $id = $request['id'];
         $chats = Chat::getChat($id);
-        $messages = Message::getMessages($id);
-        return view('/viewMessage',['messages' => $messages,'chats' => $chats]);
+        $message = Message::getMessages($id);
+        $images = Image::getImages($id);
+        $userName = User::getUserName($message->author_id);
+        $managerName = NULL;
+        if(!empty($message->manager_id)) {
+            $managerName = User::getUserName($message->manager_id);
+        }
+        return view('/viewMessage',['message' => $message,'chats' => $chats,'images' => $images,'managerName' => $managerName,'userName' => $userName]);
     }
 }

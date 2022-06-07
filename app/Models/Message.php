@@ -44,7 +44,7 @@ class Message extends Model
 
     public static function insertMessage (array $fields)
     {
-        $lastMessages = Message::where('author_id', Auth::user()->id)->where('status','open')->where('created_at', '>', Carbon::now()->subDay())->first();
+        $lastMessages = Message::where('author_id', Auth::user()->id)->where('created_at', '>', Carbon::now()->subDay())->first();
         if (empty($lastMessages)) {
            $message =  Message::create([
                 'name' => $fields['name'],
@@ -56,12 +56,13 @@ class Message extends Model
             foreach ($managers as $manager)
             {
                 MessageInsertion::dispatch($message,$manager);
-            }
+           }
         }
         if (!empty($lastMessages))
         {
             throw new TimeLimitException ('Вы можете отправить заявку лишь 1 раз за день.');
         }
+        return $message->id;
     }
 
     public static function  showAllMessages()
@@ -92,7 +93,7 @@ class Message extends Model
     }
     public static function getMessages (int $id)
     {
-        $messages = Message::all()->where('id', $id);
+        $messages = Message::find($id);
         return $messages;
     }
 }

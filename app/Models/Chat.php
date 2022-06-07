@@ -64,7 +64,8 @@ class Chat extends Model
         {
             $message = Message::find($id['id']);
             $manager = User::find($message->manager_id);
-            UserAddToChat::dispatch($message,$manager);;
+            if (!empty($manager))
+            UserAddToChat::dispatch($message,$manager);
         }
 
         return;

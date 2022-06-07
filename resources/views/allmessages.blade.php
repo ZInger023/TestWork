@@ -20,22 +20,56 @@
          @endif
          @if (Auth::user()->role == 'manager')
          <a class="nav-link" href="/admin/show/all">Посмотреть все заявки</a>
-         <a class="nav-link" href="/admin">Отсортировать заявки</a>
          @endif
          <a class="nav-link" href="/logout">Выйти из аккаунта</a>
       </nav>
     </div>
   </header>
-
   <main class="px-3">
+      @if (Auth::user()->role == 'manager')
+      <form action="/admin/show" method ="post" align="left">
+          @csrf
+          Режим сортировки заявок: <select name="status" onchange="form.submit()" autofocus>
+              <option disabled selected="selected">Все заявки</option>
+              <option value="answered">Есть ответ</option>
+              <option value="viewed">Просмотренные</option>
+              <option value="open">Открытые</option>
+          </select>
+      </form>
+      @endif
   @foreach ($messages as $message)
-             <h2><a href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-             <p>{{$message->text}}</p>
+      @if(Auth::user()->role == 'manager')
+          @if($message->status == 'open')
+                      <h2><a  style="color: green" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
+                      <p style="color: green">{{$message->text}}</p>
+                  @endif
+                  @if(((($message->status == 'answered')||($message->status == 'viewed'))&&(!empty($message->manager_id))&&($message->manager_id == Auth::id())))
+             <h2><a  style="color:yellow" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
+                      <p style="color:yellow">{{$message->text}}</p>
+              @endif
+                  @if((($message->status == 'answered')||($message->status == 'viewed'))&&(!empty($message->manager_id))&&($message->manager_id !== Auth::id()))
+                      <h2><a  style="color: red" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
+                      <p style="color: red">{{$message->text}}</p>
+                  @endif
+              @if($message->status == 'closed')
+                  <h2><a  style="color: white" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
+                  <p>{{$message->text}}</p>
+              @endif
+              @else
+                  <h2><a href="/message/{{$message->id}}">{{$message->name}}</a></h2>
+                  <p>{{$message->text}}</p>
+              @endif
              @if(($message->author_id==Auth::id())&&($message->status!='closed'))
                  <a href="/delete/{{$message->id}}">Закрыть заявку!</a>
                  @endif
              <hr>
              @endforeach
+      @if ($messages->isEmpty())
+          <h4>Заявок пока нет.Если хотите оставить новую заявку нажмите<a class="nav-link" href="/makeMessage">тут.</a></h4>
+      @endif
+
+
+
   </main>
 
   <footer class="mt-auto text-white-50">

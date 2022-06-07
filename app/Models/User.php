@@ -81,4 +81,10 @@ class User extends Authenticatable
             throw new NotUserException ('Для этого нужно быть авторизованным пользователем.');
         }
     }
+
+    public static function getUserName (int $id)
+    {
+        $user = User::find($id);
+        return $user->name;
+    }
 }

@@ -98,18 +98,6 @@
                 <table style="margin: 0 auto;" cellpadding="0" cellspacing="0" width="600" class="w320">
                     <tr>
                         <td align="center" valign="top">
-
-                            <table style="margin: 0 auto;" cellpadding="0" cellspacing="0" width="100%" style="margin:0 auto;">
-                                <tr>
-                                    <td style="font-size: 30px; text-align:center;">
-                                        <br>
-                                        Служба технической поддержки на Laravel
-                                        <br>
-                                        <br>
-                                    </td>
-                                </tr>
-                            </table>
-
                             <table style="margin: 0 auto;" cellpadding="0" cellspacing="0" class="force-full-width" width="100%" bgcolor="#4dbfbf">
                                 <tr>
                                     <td class="headline">
@@ -124,11 +112,9 @@
                                                 <tr>
                                                     <td style="color:#187272;">
                                                         <br>
-                                                        <h2><h2><h2>Заявка от {{ $user->name }} была закрыта.</h2>
-                                                                <h2>Тема заявки: {{ $messageName }}.</h2>
-                                                            </h2>
-                                                            <br>
-                                                            <br>
+                                                        <h2>Регистрация на сайте прошла успешно! Добро пожаловать!</h2>
+                                                        <br>
+                                                        <br>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -143,6 +129,8 @@
                           <w:anchorlock/>
                           <center>
                         <![endif]-->
+                                            <a href="{{url('/')}}"
+                                               style="background-color:#178f8f;border-radius:4px;color:#ffffff;display:inline-block;font-family:Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:50px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Перейти на сайт!</a>
                                             <!--[if mso]>
                                               </center>
                                             </v:roundrect>
@@ -153,28 +141,28 @@
                                 </tr>
                             </table>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div><!--[if mso]>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><!--[if mso]>
                         <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://" style="height:50px;v-text-anchor:middle;width:200px;" arcsize="8%" stroke="f" fillcolor="#ac4d2f">
                           <w:anchorlock/>
                           <center>
                         <![endif]-->
-                                <!--[if mso]>
-                                  </center>
-                                </v:roundrect>
-                              <![endif]--></div>
+                                            <!--[if mso]>
+                                              </center>
+                                            </v:roundrect>
+                                          <![endif]--></div>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>
+            </center>
         </td>
     </tr>
-</table>
-</center>
-</td>
-</tr>
 </table>
 </body>
 </html>

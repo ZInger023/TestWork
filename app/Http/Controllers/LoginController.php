@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\NotUserException;
 
 class LoginController extends Controller
 {
@@ -21,7 +22,9 @@ class LoginController extends Controller
             return redirect('dashboard');
         }
         else {
-            return redirect('/login');
+                //return redirect('/login');
+            $error = 'Неправильный логин и/или пароль';
+            return view('/loginPage',['error' => $error]);
         }
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SetMessageClosed;
 use App\Exceptions\TimeLimitException;
@@ -23,12 +24,18 @@ class MessageController extends Controller
             'text' => 'required',
         ]);
         try {
-            Message::insertMessage($fields);
+             $messageId = Message::insertMessage($fields);
         }
         catch (TimeLimitException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
     }
+        if (!empty($request->file('image'))) {
+            foreach ($request->file('image') as $file) {
+                $pathToImage = $file->store('images', 'public');
+                Image::insertImage($pathToImage, $messageId);
+            };
+        }
         return view('/messageCreatedSuccessfully');
     }
 
@@ -39,7 +46,7 @@ class MessageController extends Controller
         }
         catch (NotUserException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         $messages = Message::showAllMessages();
         return view('/allmessages',['messages' => $messages]);
@@ -52,7 +59,7 @@ class MessageController extends Controller
         }
         catch (NotAuthorException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         return redirect()->intended('dashboard');
     }
@@ -63,7 +70,7 @@ class MessageController extends Controller
         }
         catch (NotUserException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         return view('createMessage');
     }

@@ -41,7 +41,6 @@ Route::post( '/TryMessage' ,  [MessageController::class,'insertToBd'] );
 Route::get('/message/{id}', [ChatController::class,'showChat'])->name('message');
 Route::post( '/{id}/sendToChat' ,  [ChatController::class,'addToChat'] );
 
-Route::get( '/admin' ,  [AdminController::class,'showManagerPage'] );
 
 
 Route::post( '/admin/show' ,  [AdminController::class,'showToAdmin'] );

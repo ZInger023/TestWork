@@ -18,7 +18,7 @@ class Controller extends BaseController
         }
         catch (NotUserException $exception)
         {
-            return ($exception->getMessage());
+            return view('/error',['error' => $exception->getMessage()]);
         }
         return view('dashboard');
     }

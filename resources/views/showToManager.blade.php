@@ -19,18 +19,38 @@
          @endif
          @if (Auth::user()->role == 'manager')
          <a class="nav-link" href="/admin/show/all">Посмотреть все заявки</a>
-         <a class="nav-link" href="/admin">Отсортировать заявки</a>
          @endif
          <a class="nav-link" href="/logout">Выйти из аккаунта</a>
       </nav>
     </div>
   </header>
-
-  <main class="px-3">
+    <form action="/admin/show" method ="post" align="left">
+        @csrf
+        Режим сортировки заявок: <select name="status" onchange="form.submit()" autofocus>
+            <option disabled selected="selected">@php echo $selectString @endphp</option>
+             <option value="answered|@php echo $prevStatus @endphp">Есть ответ</option>
+             <option value="viewed|@php echo $prevStatus @endphp">Просмотренные</option>
+             <option value="open|@php echo $prevStatus @endphp">Открытые</option>
+        </select>
+    </form>
+  <main class="px-3" align="center">
                @foreach ($ups as $up)
-                   <h2><a href="/message/{{$up->id}}">{{$up->name}}</a></h2>
-                   <p>{{$up->text}}</p>
-                   <hr>
+          @if($up->status == 'open')
+              <h2><a  style="color: green" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
+              <p style="color: green">{{$up->text}}</p>
+          @endif
+          @if(((($up->status == 'answered')||($up->status == 'viewed'))&&(!empty($up->manager_id))&&($up->manager_id == Auth::id())))
+              <h2><a  style="color:yellow" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
+              <p style="color:yellow">{{$up->text}}</p>
+          @endif
+          @if((($up->status == 'answered')||($up->status == 'viewed'))&&(!empty($up->manager_id))&&($up->manager_id !== Auth::id()))
+              <h2><a  style="color: red" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
+              <p style="color: red">{{$up->text}}</p>
+          @endif
+          @if($up->status == 'closed')
+              <h2><a  style="color: white" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
+              <p>{{$up->text}}</p>
+          @endif
                @endforeach
   </main>
 
