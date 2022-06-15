@@ -41,23 +41,23 @@
       @if(Auth::user()->role == 'manager')
           @if($message->status == 'open')
                       <h2><a  style="color: green" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-                      <p style="color: green">{{$message->text}}</p>
+                      <p style="color: green; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$message->text}}</p>
                   @endif
                   @if(((($message->status == 'answered')||($message->status == 'viewed'))&&(!empty($message->manager_id))&&($message->manager_id == Auth::id())))
              <h2><a  style="color:yellow" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-                      <p style="color:yellow">{{$message->text}}</p>
+                      <p style="color:yellow; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$message->text}}</p>
               @endif
                   @if((($message->status == 'answered')||($message->status == 'viewed'))&&(!empty($message->manager_id))&&($message->manager_id !== Auth::id()))
                       <h2><a  style="color: red" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-                      <p style="color: red">{{$message->text}}</p>
+                      <p style="color: red;white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$message->text}}</p>
                   @endif
               @if($message->status == 'closed')
                   <h2><a  style="color: white" href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-                  <p>{{$message->text}}</p>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$message->text}}</p>
               @endif
               @else
                   <h2><a href="/message/{{$message->id}}">{{$message->name}}</a></h2>
-                  <p>{{$message->text}}</p>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$message->text}}</p>
               @endif
              @if(($message->author_id==Auth::id())&&($message->status!='closed'))
                  <a href="/delete/{{$message->id}}">Закрыть заявку!</a>

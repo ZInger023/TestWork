@@ -52,6 +52,13 @@ class ChatController extends Controller
         if(!empty($message->manager_id)) {
             $managerName = User::getUserName($message->manager_id);
         }
+        try{
+            User::isAuthorOrManager($message->author_id);
+        }
+        catch (NotUserException $exception)
+        {
+            return view('/error',['error' => $exception->getMessage()]);
+        }
         return view('/viewMessage',['message' => $message,'chats' => $chats,'images' => $images,'managerName' => $managerName,'userName' => $userName]);
     }
 }

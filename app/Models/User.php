@@ -81,6 +81,12 @@ class User extends Authenticatable
             throw new NotUserException ('Для этого нужно быть авторизованным пользователем.');
         }
     }
+    public static function isAuthorOrManager(int $author_id)
+    {
+        if ( ((Auth::user()->role == 'user')&&(Auth::user()->id !== $author_id))) {
+            throw new NotUserException ('Вы не можете просмотреть эту заявку.');
+        }
+    }
 
     public static function getUserName (int $id)
     {

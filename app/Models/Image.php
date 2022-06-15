@@ -11,6 +11,7 @@ use App\Exceptions\TimeLimitException;
 use App\Jobs\SetMessageClosed;
 use App\Jobs\MessageInsertion;
 use App\Exceptions\NotAuthorException;
+use App\Exceptions\NotPngOrJpgException;
 
 class Image extends Model
 {
@@ -34,6 +35,16 @@ class Image extends Model
     protected $casts = [
         'created_at' => 'datetime',
     ];
+
+    public static function validateType (string $type)
+    {
+        if(($type=='image/jpg')||($type=='image/png')) {
+            return;
+        }
+        else {
+            throw new NotPngOrJpgException('Ошибка!Вы загружаете не png и не jpg файл.');
+        }
+    }
 
     public static function insertImage (string $path,int $id)
     {

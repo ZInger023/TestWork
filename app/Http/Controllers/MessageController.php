@@ -14,6 +14,7 @@ use App\Jobs\SetMessageClosed;
 use App\Exceptions\TimeLimitException;
 use App\Exceptions\NotAuthorException;
 use App\Exceptions\NotUserException;
+use App\Exceptions\NotPngOrJpgException;
 
 class MessageController extends Controller
 {
@@ -23,6 +24,19 @@ class MessageController extends Controller
             'name' => 'required',
             'text' => 'required',
         ]);
+        if (!empty($request->file('image'))) {
+            foreach ($request->file('image') as $file) {
+                try {
+                    Image::validateType($file->getClientMimeType());
+                }
+                catch (NotPngOrJpgException $exception)
+                {
+                    return view('/error',['error' => $exception->getMessage()]);
+                }
+                $pathToImage = $file->store('images', 'public');
+                Image::insertImage($pathToImage, $messageId);
+            };
+        }
         try {
              $messageId = Message::insertMessage($fields);
         }
@@ -30,12 +44,9 @@ class MessageController extends Controller
         {
             return view('/error',['error' => $exception->getMessage()]);
     }
-        if (!empty($request->file('image'))) {
-            foreach ($request->file('image') as $file) {
-                $pathToImage = $file->store('images', 'public');
-                Image::insertImage($pathToImage, $messageId);
-            };
-        }
+
+
+
         return view('/messageCreatedSuccessfully');
     }
 

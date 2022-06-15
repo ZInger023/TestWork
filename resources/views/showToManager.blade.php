@@ -34,22 +34,26 @@
         </select>
     </form>
   <main class="px-3" align="center">
+      @if($ups->isEmpty())
+      <h2>Заявок такого типа нет.<h2>
+      @endif
+
                @foreach ($ups as $up)
           @if($up->status == 'open')
               <h2><a  style="color: green" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
-              <p style="color: green">{{$up->text}}</p>
+              <p style="color: green; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$up->text}}</p>
           @endif
           @if(((($up->status == 'answered')||($up->status == 'viewed'))&&(!empty($up->manager_id))&&($up->manager_id == Auth::id())))
               <h2><a  style="color:yellow" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
-              <p style="color:yellow">{{$up->text}}</p>
+              <p style="color:yellow; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$up->text}}</p>
           @endif
           @if((($up->status == 'answered')||($up->status == 'viewed'))&&(!empty($up->manager_id))&&($up->manager_id !== Auth::id()))
               <h2><a  style="color: red" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
-              <p style="color: red">{{$up->text}}</p>
+              <p style="color: red; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$up->text}}</p>
           @endif
           @if($up->status == 'closed')
               <h2><a  style="color: white" href="/message/{{$up->id}}">{{$up->name}}</a></h2>
-              <p>{{$up->text}}</p>
+              <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{$up->text}}</p>
           @endif
                @endforeach
   </main>
