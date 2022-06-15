@@ -9,7 +9,7 @@
 4. Ввести команды "php artisan key:generate"
 
 "php artisan migrate"
-
+"php artisan storage:link"
 5. Запустить локальный сервер, вы можете использовать встроенный от Laravel, введя команду "php artisan serve"
 
 
