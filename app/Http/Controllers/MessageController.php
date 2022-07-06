@@ -25,30 +25,34 @@ class MessageController extends Controller
             'text' => 'required',
         ]);
         if (!empty($request->file('image'))) {
+            for ($numberOfImage=0; $numberOfImage<count($request['image']); $numberOfImage++) {
+                $validation = $request->validate([
+                    'image.'.$numberOfImage => 'mimes:jpg,png'
+                ]);
+            }
+            $numberOfPaths = 0;
             foreach ($request->file('image') as $file) {
-                try {
-                    Image::validateType($file->getClientMimeType());
-                }
-                catch (NotPngOrJpgException $exception)
-                {
-                    return view('/error',['error' => $exception->getMessage()]);
-                }
-                $pathToImage = $file->store('images', 'public');
-                Image::insertImage($pathToImage, $messageId);
+                $pathToImage[$numberOfPaths] = $file->store('images', 'public');
+                $numberOfPaths++;
             };
         }
         try {
-             $messageId = Message::insertMessage($fields);
+            $messageId = Message::insertMessage($fields);
+            for ($numberOfImage=0; $numberOfImage<$numberOfPaths; $numberOfImage++) {
+                Image::insertImage($pathToImage[$numberOfImage], $messageId);
+            }
         }
         catch (TimeLimitException $exception)
         {
             return view('/error',['error' => $exception->getMessage()]);
-    }
+        }
 
 
 
         return view('/messageCreatedSuccessfully');
     }
+
+
 
     public  function  showMessages()
     {
@@ -64,6 +68,13 @@ class MessageController extends Controller
     }
 
     public  function  deleteMessage(Request $request) {
+        try {
+            User::isUser();
+        }
+        catch (NotUserException $exception)
+        {
+            return view('/error',['error' => $exception->getMessage()]);
+        }
         try {
             $message_id = $request->route('id');
             Message::closeMessage($message_id);

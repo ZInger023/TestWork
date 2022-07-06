@@ -28,9 +28,9 @@
         @csrf
         Режим сортировки заявок: <select name="status" onchange="form.submit()" autofocus>
             <option disabled selected="selected">@php echo $selectString @endphp</option>
-             <option value="answered|@php echo $prevStatus @endphp">Есть ответ</option>
-             <option value="viewed|@php echo $prevStatus @endphp">Просмотренные</option>
-             <option value="open|@php echo $prevStatus @endphp">Открытые</option>
+            <option value="@php echo $statuses[0] @endphp|@php echo $prevStatus @endphp">@php echo $statusesRu[0] @endphp</option>
+            <option value="@php echo $statuses[1] @endphp|@php echo $prevStatus @endphp">@php echo $statusesRu[1] @endphp</option>
+            <option value="@php echo $statuses[2] @endphp|@php echo $prevStatus @endphp">@php echo $statusesRu[2] @endphp</option>
         </select>
     </form>
   <main class="px-3" align="center">

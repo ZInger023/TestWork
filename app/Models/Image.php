@@ -36,14 +36,9 @@ class Image extends Model
         'created_at' => 'datetime',
     ];
 
-    public static function validateType (string $type)
+    public static function NotPngOrJpg ()
     {
-        if(($type=='image/jpg')||($type=='image/png')) {
-            return;
-        }
-        else {
             throw new NotPngOrJpgException('Ошибка!Вы загружаете не png и не jpg файл.');
-        }
     }
 
     public static function insertImage (string $path,int $id)
