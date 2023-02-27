@@ -18,19 +18,19 @@ use App\Exceptions\NotPngOrJpgException;
 
 class MessageController extends Controller
 {
-    public function insertToBd (Request $request)
+public function insertToBd (Request $request)
     {
         $fields = $request->validate([
             'name' => 'required',
             'text' => 'required',
         ]);
+        $numberOfPaths = 0;
         if (!empty($request->file('image'))) {
             for ($numberOfImage=0; $numberOfImage<count($request['image']); $numberOfImage++) {
                 $validation = $request->validate([
                     'image.'.$numberOfImage => 'mimes:jpg,png'
                 ]);
             }
-            $numberOfPaths = 0;
             foreach ($request->file('image') as $file) {
                 $pathToImage[$numberOfPaths] = $file->store('images', 'public');
                 $numberOfPaths++;
@@ -38,8 +38,10 @@ class MessageController extends Controller
         }
         try {
             $messageId = Message::insertMessage($fields);
+            if ($numberOfPaths != 0) {
             for ($numberOfImage=0; $numberOfImage<$numberOfPaths; $numberOfImage++) {
                 Image::insertImage($pathToImage[$numberOfImage], $messageId);
+            }
             }
         }
         catch (TimeLimitException $exception)
