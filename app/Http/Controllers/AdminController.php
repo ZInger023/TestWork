@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use App\Exceptions\NotManagerException;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -21,6 +19,8 @@ class AdminController extends Controller
          }
          catch (NotManagerException $exception)
          {
+             $userId = Auth::id();
+             Log::channel('daily')->info('Рядовой пользователь ' . $userId.' пытался попасть в админку и получил ошибку : "' .$exception->getMessage().'"');
              return view('/error',['error' => $exception->getMessage()]);
          }
          $CurrentAndPreviousStatus = explode("|", $request['status']);
@@ -92,6 +92,8 @@ class AdminController extends Controller
         }
         catch (NotManagerException $exception)
         {
+            $userId = Auth::id();
+            Log::channel('daily')->info('Рядовой пользователь ' . $userId.' пытался попасть в админку и получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
         $messages = Message::all();
@@ -104,6 +106,8 @@ class AdminController extends Controller
         }
         catch (NotManagerException $exception)
         {
+            $userId = Auth::id();
+            Log::channel('daily')->info('Рядовой пользователь ' . $userId.' пытался попасть в админку и получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
         $id = $request->route('id');

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -95,5 +94,12 @@ class Message extends Model
     {
         $messages = Message::find($id);
         return $messages;
+    }
+    public static function updateInfo (array $fields)
+    {
+        Message::where('id',$fields['id'])->update([
+            'name' => $fields['name'],
+            'text' => $fields['text'],
+        ]);
     }
 }

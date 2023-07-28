@@ -2,35 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Requests\MessageRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\Image;
-use Illuminate\Support\Facades\DB;
-use App\Jobs\SetMessageClosed;
 use App\Exceptions\TimeLimitException;
 use App\Exceptions\NotAuthorException;
 use App\Exceptions\NotUserException;
-use App\Exceptions\NotPngOrJpgException;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
-    public function insertToBd (Request $request)
+    public function insertToBd (MessageRequest $request)
     {
-        $fields = $request->validate([
-            'name' => 'required',
-            'text' => 'required',
-        ]);
+        $fields = array(
+            "name" => $request['name'],
+            "text" => $request['text'],
+        );
+        $numberOfPaths = 0;
         if (!empty($request->file('image'))) {
-            for ($numberOfImage=0; $numberOfImage<count($request['image']); $numberOfImage++) {
-                $validation = $request->validate([
-                    'image.'.$numberOfImage => 'mimes:jpg,png'
-                ]);
-            }
-            $numberOfPaths = 0;
             foreach ($request->file('image') as $file) {
                 $pathToImage[$numberOfPaths] = $file->store('images', 'public');
                 $numberOfPaths++;
@@ -44,6 +37,8 @@ class MessageController extends Controller
         }
         catch (TimeLimitException $exception)
         {
+            $userId = Auth::id();
+            Log::channel('daily')->info('Пользователь '. $userId. ' получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
 
@@ -61,18 +56,20 @@ class MessageController extends Controller
         }
         catch (NotUserException $exception)
         {
+            Log::channel('daily')->info('Не авторизованный пользователь получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
         $messages = Message::showAllMessages();
         return view('/allmessages',['messages' => $messages]);
     }
 
-    public  function  deleteMessage(Request $request) {
+    public  function  closeMessage(Request $request) {
         try {
             User::isUser();
         }
         catch (NotUserException $exception)
         {
+            Log::channel('daily')->info('Не авторизованный пользователь получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
         try {
@@ -81,6 +78,8 @@ class MessageController extends Controller
         }
         catch (NotAuthorException $exception)
         {
+            $userId = Auth::id();
+            Log::channel('daily')->info('Пользователь '. $userId. ' пытался закрыть заявку '.$message_id. ' и получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
         return redirect()->intended('dashboard');
@@ -92,8 +91,75 @@ class MessageController extends Controller
         }
         catch (NotUserException $exception)
         {
+            Log::channel('daily')->info('Не авторизованный пользователь пытался оставить заявку и получил ошибку : "' .$exception->getMessage().'"');
             return view('/error',['error' => $exception->getMessage()]);
         }
         return view('createMessage');
+    }
+    public  function  showUpdatePage(Request $request) {
+        try {
+            User::isUser();
+        }
+        catch (NotUserException $exception) {
+            Log::channel('daily')->info('Не авторизованный пользователь пытался начать редактирование заявки и получил ошибку : "' .$exception->getMessage().'"');
+            return view('/error',['error' => $exception->getMessage()]);
+        }
+        $message = Message::find ($request->route('id'));
+        $images = Image::getImages($message->id);
+        return view('updateMessage',['message' => $message,'images' => $images]);
+    }
+    public  function  updateMessage(MessageRequest $request) {
+        $fields = array(
+            "name" => $request['name'],
+            "text" => $request['text'],
+            "id" => $request['id'],
+
+        );
+        $numberOfPaths = 0;
+        if (!empty($request->file('image'))) {
+            foreach ($request->file('image') as $file) {
+                $pathToImage[$numberOfPaths] = $file->store('images', 'public');
+                $numberOfPaths++;
+            };
+        }
+            Message::updateInfo($fields);
+            for ($numberOfImage=0; $numberOfImage<$numberOfPaths; $numberOfImage++) {
+                Image::insertImage($pathToImage[$numberOfImage], $request['id']);
+            }
+        return redirect()->intended('/message/'.$request['id']);
+    }
+
+    public  function  deleteMessage(Request $request) {
+        try {
+            $message_id = $request->route('id');
+            $message = Message::find($message_id);
+            User::isAuthorOrManager($message->author_id);
+            Image::where('message_id', $message_id)->delete();
+            Chat::where('message_id', $message_id)->delete();
+            Message::where('id', $message_id)->delete();
+        }
+        catch (NotAuthorException $exception)
+        {
+            $userId = Auth::id();
+            Log::channel('daily')->info('Пользователь '. $userId. ' пытался удалить заявку '.$message_id. ' и получил ошибку : "' .$exception->getMessage().'"');
+            return view('/error',['error' => $exception->getMessage()]);
+        }
+        return redirect()->intended('/myMessages');
+    }
+    public  function  deleteImage(Request $request) {
+        try {
+            $image = Image::find($request->route('id'));
+            $message = Message::find($image->message_id);
+            User::isAuthorOrManager($message->author_id);
+            Image::where('id',$image->id)->delete();
+            $images = Image::where('message_id',$message->id)->get();
+        }
+        catch (NotAuthorException $exception)
+        {
+            $userId = Auth::id();
+            Log::channel('daily')->info('Пользователь '. $userId. ' пытался удалить изображение '.$message_id. ' и получил ошибку : "' .$exception->getMessage().'"');
+            return view('/error',['error' => $exception->getMessage()]);
+        }
+        return view('/updateMessage',['message' => $message,'images' => $images]);
     }
 }

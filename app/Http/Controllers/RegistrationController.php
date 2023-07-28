@@ -3,26 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Requests\RegistrationRequest;
 use App\Models\Registration;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class RegistrationController extends Controller
 {
-    public function registration(Request $request)
+    public function registration(RegistrationRequest $request)
     {
-        $request->validate([
-            'nickname' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
-        ]);
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
         User::create([
             'name' => $request['nickname'],
             'email' => $request['email'],
@@ -30,9 +19,9 @@ class RegistrationController extends Controller
         ]);
         $remember = true;
         Registration::SendMessage($request['email']);
-        if (Auth::attempt($credentials,$remember)) {
-            $request->session()->regenerate();
 
+        if (Auth::attempt(['email' => $request->email, 'password' =>$request->password], $remember)) {
+            $request->session()->regenerate();
             return redirect('dashboard');
         }
     }

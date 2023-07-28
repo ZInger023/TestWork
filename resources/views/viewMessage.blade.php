@@ -6,6 +6,7 @@
             {{$message->name}}
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-RlQMpV89NqWGGjWth6DEZCr3lYNcsw8aHpMbz2jvOds+TkHqCxsZFme0A33WvgJ2Qk5jDs6ybs4Qb1q/fez2w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <style>
         .MyMessages {
@@ -55,7 +56,9 @@
                         <th>@if($chat->author_id == Auth::id())
                                 <h1 style="font:12px verdana; text-align: right; color:blue">Вы:</h1>
                                 <p class="MyMessages">{{$chat->text}}</p>
-                                <h1 style="font:8px verdana; text-align: left">{{$chat->created_at}}</h1><hr>
+                                <h1 style="font:8px verdana; text-align: left">{{$chat->created_at}}</h1>
+                                <a style="float:right" href="/updateChat/ @php echo $chat->id @endphp">Редактировать сообщение. </a>
+                                <a style="float:left" href="/deleteChat/{{$chat->id}}">Удалить сообщение</a>
                             </th>
                         <th></th>
                     </tr>
@@ -82,7 +85,15 @@
             <a href="/admin/setViewed/{{$message->id}}">Принять заявку на рассмотрение!</a>
         @endif
         @if((($message->author_id==Auth::id())||($message->manager_id==Auth::id()))&&($message->status!='closed'))
-            <a href="/delete/{{$message->id}}">Закрыть заявку!</a>
+            <a href="/close/{{$message->id}}">Закрыть заявку!</a>
+        @endif
+        @if(($message->author_id==Auth::id())&&($message->status!='closed'))
+            <br>
+            <a href="/updateMessageForm/{{$message->id}}">Редактировать заявку.</a>
+        @endif
+        @if((($message->author_id==Auth::id())||($message->manager_id==Auth::id())))
+            <br>
+            <a href="/delete/{{$message->id}}">Удалить заявку!</a>
         @endif
     </main>
 

@@ -1,14 +1,11 @@
 <?php
 
 namespace app\Models;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\NotManagerException;
 use App\Exceptions\NotUserException;
 use Illuminate\Support\Facades\Auth;
@@ -92,5 +89,26 @@ class User extends Authenticatable
     {
         $user = User::find($id);
         return $user->name;
+    }
+
+    public static function updateInfo (string $name=null,string $email=null,string $password=null) {
+        if (!empty($password)) {
+           $password = Hash::make($password);
+        }
+        if (empty($name)) {
+            $name = Auth::user()->name;
+        }
+        if (empty($email)) {
+            $email = Auth::user()->email;
+        }
+        if (empty($password)) {
+            $password = Auth::user()->password;
+        }
+
+        User::where('id',Auth::user()->id)->update([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password
+        ]);
     }
 }

@@ -16,9 +16,11 @@
          @if (Auth::user()->role == 'user')
         <a class="nav-link" href="/makeMessage">Оставить новую заявку</a>
         <a class="nav-link" href="/myMessages">Мои заявки</a>
+              <a class="nav-link" href="/myAccount">Мой профиль</a>
          @endif
          @if (Auth::user()->role == 'manager')
          <a class="nav-link" href="/admin/show/all">Посмотреть все заявки</a>
+                 <a class="nav-link" href="/myAccount">Мой профиль</a>
          @endif
          <a class="nav-link" href="/logout">Выйти из аккаунта</a>
       </nav>

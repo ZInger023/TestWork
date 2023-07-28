@@ -2,15 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use App\Exceptions\TimeLimitException;
-use App\Jobs\SetMessageClosed;
-use App\Jobs\MessageInsertion;
-use App\Exceptions\NotAuthorException;
 use App\Exceptions\NotPngOrJpgException;
 
 class Image extends Model
@@ -43,7 +35,7 @@ class Image extends Model
 
     public static function insertImage (string $path,int $id)
     {
-            $image =  Image::create([
+            Image::create([
                 'path' => $path,
                 'message_id' => $id,
             ]);

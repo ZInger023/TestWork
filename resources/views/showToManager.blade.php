@@ -18,6 +18,7 @@
         <a class="nav-link" href="/myMessages">Мои заявки</a>
          @endif
          @if (Auth::user()->role == 'manager')
+                 <a class="nav-link" href="/dashboard">На главную</a>
          <a class="nav-link" href="/admin/show/all">Посмотреть все заявки</a>
          @endif
          <a class="nav-link" href="/logout">Выйти из аккаунта</a>

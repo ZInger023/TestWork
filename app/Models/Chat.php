@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\ManagerAddToChat;
 use App\Jobs\UserAddToChat;
@@ -40,12 +39,12 @@ class Chat extends Model
         return $chats;
     }
 
-    public static function addToChat (array $id,array $text)
+    public static function addToChat (array $id,string $text)
     {
 
         Chat::create([
             'message_id' => $id['id'],
-            'text' => $text['text'],
+            'text' => $text,
             'author_id' => Auth::user()->id,
 
         ]);
@@ -70,5 +69,11 @@ class Chat extends Model
 
         return;
     }
-
+    public static function updateText (int $id,string $text)
+    {
+         Chat::where('id',$id)->update([
+            'text' => $text,
+        ]);
+         return Chat::find($id);
+    }
 }

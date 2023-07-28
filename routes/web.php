@@ -33,18 +33,28 @@ Route::get('/login', function () {
 });
 Route::post( '/log' ,  [LoginController::class,'login'] );
 Route::get('/dashboard', [Controller::class,'showDashboard']);
+Route::get('/myAccount', [Controller::class,'showUpdateProfile'])->name('myAccount');
+Route::get('/deleteMyAccount', [Controller::class,'deleteAccount']);
+Route::post('/ChangeAccountInfo', [Controller::class,'changeAccountInfo']);
 Route::get('/makeMessage', [MessageController::class,'showCreateForm']);
 Route::get('/myMessages', [MessageController::class,'showMessages']);
+Route::get('/close/{id}', [MessageController::class,'closeMessage']);
 Route::get('/delete/{id}', [MessageController::class,'deleteMessage']);
+Route::post('/updateMessage/{id}', [MessageController::class,'updateMessage']);
+Route::get('/updateMessageForm/{id}', [MessageController::class,'showUpdatePage']);
 
 Route::post( '/TryMessage' ,  [MessageController::class,'insertToBd'] );
 Route::get('/message/{id}', [ChatController::class,'showChat'])->name('message');
 Route::post( '/{id}/sendToChat' ,  [ChatController::class,'addToChat'] );
+Route::get('/updateChat/{id}', [ChatController::class,'showUpdateChatPage']);
+Route::post('/updateChatMessage/{id}', [ChatController::class,'updateChatMessage']);
+Route::get('/deleteChat/{id}', [ChatController::class,'deleteChatMessage']);
 
-
+Route::get('/deleteImage/{id}', [MessageController::class,'deleteImage']);
 
 Route::post( '/admin/show' ,  [AdminController::class,'showToAdmin'] );
 Route::get( '/admin/show/all' ,  [AdminController::class,'showAll'] );
 Route::get( '/admin/setViewed/{id}' ,  [AdminController::class,'setViewed'] );
 Route::get( '/logout' ,  [LogOutController::class,'logout'] );
 
+Route::get('/testLog', [Controller::class,'testLog']);
